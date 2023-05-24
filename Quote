@@ -1,0 +1,196 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+
+    <title>Quote</title>
+
+
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
+
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        body{
+            background: url("https://images.unsplash.com/photo-1490598000245-075175152d25?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=") no-repeat center center fixed;
+            background-size: cover;
+        }
+        
+        .content{
+            position: relative;
+            margin: 8% auto auto auto;
+            width: 40%;
+            padding:40px 50px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.6);  /*背景透明而上面的内容不透明*/
+        
+        }
+        
+        .quote i{
+            font-size: 4em;
+            color: rgb(39,174,96);
+        }
+        
+        .quote-content{
+            display: inline;
+            font-size: 2em;
+            color: rgb(39,174,96);
+        }
+        
+        .author{
+            position: relative;
+            text-align: right;
+        
+            color: rgb(39,174,96);
+        }
+        
+        .author i{
+            font-size: 4em;
+            color: rgb(39,174,96);
+        }
+        
+        .quote-author{
+            font-size: 1.5em;
+            display: inline;
+        }
+        
+        
+        
+        .addition{
+            width: 100%;
+            position: relative;
+        }
+        .addition center{
+            position: relative;
+        }
+        
+        .btn_next{
+            padding:5px 10px;
+            font-size: 1.5em;
+            color: #fff;
+            background: rgb(39,174,96);
+        
+            border: 0;
+        }
+        .btn_next:blur{
+            color: #fff;
+        }
+        
+        
+        .addition .shareQQ{
+            position: relative;
+            color: #ccc;
+            font-size: 2em;
+        }
+        .addition .shareQQ:hover{
+            color: rgb(39,174,96);
+        
+        }
+        .addition a{
+            position: relative;
+            text-align: right;
+        }
+        .share{
+            position: relative;
+            text-align: right;
+        }
+        /*背景透明，字体不透明，兼容 IE6/7/8  参考网址：http://www.cnblogs.com/PeunZhang/p/4089894.html*/
+        @media \0screen\,screen\9{
+            /*只支持IE6/7/8*/
+            .content{
+                background-color: #fff;
+                filter:Alpha(opacity=50);
+                position: static;/* IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值 */
+                *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
+            }
+        
+            /*必须设置为relative，这样可以使它内容不透明*/
+            .content .quote{
+                position: relative;
+            }
+            .content .author{
+                position: relative;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid content">
+        <div class="quote">
+            <i class="fa fa-quote-left" aria-hidden="true"></i>
+            <p class="quote-content">Blessed is the man, who having nothing to say, abstains from giving wordy evidence of the fact.</p>
+        </div>
+        <br>
+        <div class="author">
+            <p class="quote-author">——Paul Erdos</p>
+            <i class="fa fa-quote-right" aria-hidden="true"></i>
+        </div>
+        <div class="addition">
+            <center><button class="btn btn-primary btn_next" onmouseover="this.style.background='#096148';this.style.color='#fff'" onmouseout="this.style.background='rgb(39,147,96)'" style="background: rgb(39, 147, 96); color: rgb(255, 255, 255);">Next Quote</button></center>
+            <div class="share"><a href="#"><i class="fa fa-qq shareQQ" aria-hidden="true"></i></a></div>
+        </div>
+    </div>
+
+
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script src="js/index.js"></script>
+
+
+    <script>
+        $(document).ready(function(){
+            $(".btn_next").mouseup(function(){
+                $(".btn_next").css("border","0");
+                $(".btn_next").css("color","#fff");
+                $(".btn_next").css("border",0);
+            });
+            $(".btn_next").mousedown(function(){
+                $(".btn_next").css("border-color","#096148");
+                $(".btn_next").css("color","#66bab7");
+                $(".btn_next").css("border",0);
+            });
+        
+        
+            //调用一言api
+            $(".btn_next").on("click",function(){
+                getQuote();
+            });
+        
+            var content="Blessed is the man, who having nothing to say, abstains from giving wordy evidence of the fact.";
+            var author="Paul Erdos";
+            var getQuote = function(){
+                $.getJSON("https://sslapi.hitokoto.cn/?encode=json",function(json){
+                    content = json["hitokoto"];
+                    author = json["from"];
+                    //console.log(content+"_"+author);
+        
+                    $(".quote-content").html(content);
+                    $(".quote-author").html("——"+author);
+                });
+            }
+        
+            getQuote();
+        
+        
+            $(".shareQQ").on("click",function(){
+                console.log(content+author);
+                window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.baidu.com&desc='+content+'——'+author+'&title=吟游佳句&summary=我发现了一句很漂亮的话，快来看看吧&pics=&site=bshare');
+            });
+        
+        
+        });
+    </script>
+
+
+</body>
+
+</html>
